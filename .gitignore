@@ -1,0 +1,13 @@
+.liquid/
+dist-newstyle/
+.direnv/
+/result*
+/liquid-haskell/src/.liquid/
+/.envrc
+.vscode/
+*.agdai
+/haskell-code/pacemaker-level
+/haskell-code/vending
+*.log
+*.out
+*.aux

@@ -1,0 +1,32 @@
+cabal-version:       2.4
+name:                liquid-haskell
+version:             0.1.0.0
+license:             NONE
+author:              Mike Sperber
+maintainer:          michael.sperber@active-group.de
+
+library
+  build-depends:       base,
+                       containers,
+                       liquidhaskell-boot,
+                       liquidhaskell
+
+  -- hs-source-dirs:
+  default-language:    Haskell2010
+  ghc-options:      -fwarn-incomplete-patterns -fplugin=LiquidHaskell -Werror
+
+  exposed-modules: Intro, Bresenham, Vec
+  hs-source-dirs: src
+
+executable main
+  main-is: Main.hs
+  hs-source-dirs: src
+  build-depends: base, liquidhaskell
+  default-language: Haskell2010
+
+test-suite bresenham-test
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+  build-depends:
+    base, liquid-haskell, QuickCheck, liquidhaskell

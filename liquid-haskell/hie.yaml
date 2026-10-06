@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - component: "lib:liquid-haskell"
+      path: "./src"
+    - component: "test:bresenham-test"
+      path: "./test"
+
