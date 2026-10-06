@@ -68,3 +68,76 @@ cSelect product =
                     Coffee -> "coffee"
      hPutStr (actionHandle cVending) (action ++ "\n")
      cOutput
+
+-- Zustandsmaschine
+
+data State = MkState (Maybe Product) 
+  deriving Show
+
+instance StateModel State where
+  data Action State =
+      Select Product
+    | InsertCoin
+    deriving Show
+
+  type ActionMonad State = IO
+
+  arbitraryAction :: State -> Gen (Action State)
+  arbitraryAction _ = oneof [pure InsertCoin,
+                             Select <$> elements [Tea, Coffee]]
+
+  data Ret State = 
+      Dispense Product
+    | GiveBackCoin                  
+    | Noop
+    deriving Show
+
+  initialState :: State
+  initialState = MkState Nothing
+
+  nextState :: State -> Action State -> Step -> State
+  nextState (MkState previousSelection) (Select product) step = 
+    MkState (Just product)
+  nextState state InsertCoin step = state
+
+  postcondition :: State -> Action State -> (Step -> Ret State) -> Ret State -> Bool
+  postcondition state (Select product) getStep (Dispense product') =
+    product == product'
+  postcondition state (Select product) getStep GiveBackCoin =
+    True
+  postcondition state (Select product) getStep Noop =
+    True
+  postcondition (MkState (Just product)) InsertCoin getStep (Dispense product') =
+    product == product'
+  postcondition (MkState Nothing) InsertCoin getStep (Dispense product') =
+    False
+  postcondition state InsertCoin getStep GiveBackCoin = True
+  postcondition state InsertCoin getStep Noop = True
+
+  perform :: Action State -> [Ret State] -> ActionMonad State (Ret State)
+  perform (Select product) _ = 
+    do maybeOutput <- cSelect product
+       case maybeOutput of
+         Nothing -> return Noop
+         Just DispenseTea -> return (Dispense Tea)
+         Just DispenseCoffee -> return (Dispense Coffee)
+         Just ReturnCoin -> return GiveBackCoin
+
+  perform InsertCoin _ = 
+    do maybeOutput <- cCoin
+       case maybeOutput of
+        Nothing -> return Noop
+        Just DispenseTea -> return (Dispense Tea)
+        Just DispenseCoffee -> return (Dispense Coffee)
+        Just ReturnCoin -> return GiveBackCoin
+
+prop_CorrectProduct :: Script State -> Property
+prop_CorrectProduct s =
+  monadicIO $ do
+    run startCVending
+    runScript s
+    run finishCVending
+    assert True
+        
+main :: IO ()
+main = quickCheck prop_CorrectProduct

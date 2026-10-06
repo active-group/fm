@@ -12,10 +12,10 @@ typedef enum selection_e {
   NOTHING, TEA, COFFEE
 } selection_t;
 
-int money = 0;
+money_t money = 0;
 selection_t selection = NOTHING;
 
-const int product_price = 3;
+const money_t product_price = 3;
 
 output_t
 maybeDispense(void)
@@ -52,7 +52,8 @@ insert_coin(void)
 output_t
 select(selection_t new_selection)
 {
-  selection = new_selection;
+  if (money != 1)
+    selection = new_selection;
   return maybeDispense();
 }
 
