@@ -81,6 +81,26 @@ pred algorithm {
                       reachable[s, Trace.initialState, next]}
 }
 
-random_run: run {
+random_run: run { // Beispiel
     algorithm
-} for exactly 6 State for { next is linear } 
+} for 6 State for { next is linear } 
+
+tea_in_4_steps: run {
+    algorithm  // and
+    some s1, s2, s3, s4, s5 : State, i1, i2, i3, i4 : Input | {
+        Trace.inputAfter[s1] = i1
+        Trace.inputAfter[s2] = i2
+        Trace.inputAfter[s3] = i3
+        Trace.inputAfter[s4] = i4
+        s1.next = s2
+        s2.next = s3
+        s3.next = s4
+        s4.next = s5
+        s5.output = DispenseTea
+    }
+} for 5 State for { next is linear }
+
+criterion: check { // Gegenbeispiel
+    algorithm =>
+    true // Angelas Kriterium
+}
