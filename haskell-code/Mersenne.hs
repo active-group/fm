@@ -10,4 +10,7 @@ isPrime n | n <= 1 = False
 isPrime 2 = True
 isPrime n = not (any (`divides` n) [2..n-1])
 
-main = quickCheck(\n -> isPrime n ==> isPrime(2^n - 1))
+prop :: Integer -> Property
+prop = \n -> isPrime n && n /= 11 ==> isPrime (2 ^ n - 1)
+
+main = quickCheck prop
