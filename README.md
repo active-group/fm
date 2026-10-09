@@ -7,8 +7,6 @@
 
 # Artikel zum Thema
 
-- https://funktionale-programmierung.de/archive.html
-
 ## z3
 
 - https://funktionale-programmierung.de/2026/02/10/z3-theorembeweiser-1.html
@@ -19,3 +17,10 @@
 - [Introduction to Description Logic](https://info216.wiki.uib.no/images/e/ef/NardiBrachman-IntroductionToDescriptionLogic.pdf)
 - [Basic Description Logics](https://www.diag.uniroma1.it/~nardi/Didattica/RC/dispense/dlhb-02-2pp.pdf)
 - [Protégé](https://protege.stanford.edu/)
+
+# QuickCheck
+
+- [Port von QuickCheck nach F#: FsCheck](https://github.com/Fscheck/fscheck/)
+- [Beispiel in F#](https://github.com/EluciusFTW/countle-solver)
+
+
